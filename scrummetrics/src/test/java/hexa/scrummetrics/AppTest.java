@@ -1,4 +1,4 @@
-package Hexa.ScrumMetrics;
+package hexa.scrummetrics;
 
 import static org.junit.Assert.assertTrue;
 
