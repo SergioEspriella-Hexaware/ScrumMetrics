@@ -20,6 +20,7 @@ public class DeltaPage extends Base {
 	By search = By.id("search_input");
 	By searchList = By.xpath("//*[@id=\"airport-serach-panel\"]/div/div[2]");
 	By toBtn = By.id("toAirportName");
+	
 	By depart = By.id("input_departureDate_1");
 	By doneBtn = By.xpath(
 			"//*[@id=\"booking\"]/form/div[1]/div/div[1]/div[1]/div[3]/date-selection-view/div/div/div/div/div[4]/div/div[3]/button[2]");
