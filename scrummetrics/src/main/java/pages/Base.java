@@ -1,4 +1,4 @@
-package hexa.scrummetrics;
+package pages;
 
 import java.util.List;
 
