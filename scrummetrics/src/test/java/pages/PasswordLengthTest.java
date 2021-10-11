@@ -23,8 +23,8 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Parameterized.class)
-public class UserRegistrationInvalidEmailTest {
-	
+public class PasswordLengthTest {
+
 	private WebDriver driver;
 	UserRegistration ur;
 	private final String name, email, username, password;
@@ -35,7 +35,7 @@ public class UserRegistrationInvalidEmailTest {
 
 		InputStream inp = new FileInputStream("excel/ValidEmailUsrReg.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(1);
+		Sheet sheet = wb.getSheetAt(2);
 		DataFormatter formatter = new DataFormatter();
 
 		int row = 1;
@@ -56,13 +56,13 @@ public class UserRegistrationInvalidEmailTest {
 		return args;
 	}
 	
-	public UserRegistrationInvalidEmailTest(String a, String b, String c, String d) {
+	public PasswordLengthTest(String a, String b, String c, String d) {
 		this.name = a;
 		this.email = b;
 		this.username = c;
 		this.password = d;
 	}
-
+	
 	@Before
 	public void setUp() throws Exception {
 		ur = new UserRegistration(driver);
@@ -78,7 +78,7 @@ public class UserRegistrationInvalidEmailTest {
 	@Test
 	public void test() {
 		ur.fillUserRegistration(name, email, username, password);
-		assertEquals("email not valid", ur.userNotRegistered());
+		assertEquals("password must be 8 - 12 characters", ur.wrongPassLenght());
 	}
 
 }

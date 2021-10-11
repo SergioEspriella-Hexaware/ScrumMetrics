@@ -18,24 +18,24 @@ public class UserRegistration extends Base{
 	By checkboxLocator = By.xpath("//div[@class='mat-checkbox-inner-container']");
 	By submitLocator = By.xpath("//button[@class='mat-raised-button']");
 	
-	public void validEmail() {
-		type("nombre completo", nameLocator);
-		type("validmail7@outlook.com", mailLocator);
-		type("newuser007", usernameLocator);
-		type("P4ssword.", passLocator);
-		type("P4ssword.", confirmLocator);
+	public void fillUserRegistration(String name, String email, String username, String password) {
+		type(name, nameLocator);
+		type(email, mailLocator);
+		type(username, usernameLocator);
+		type(password, passLocator);
+		type(password, confirmLocator);
 		click(checkboxLocator);
 		submit(submitLocator);
 	}
 	
-	public void invalidEmail() {
-		type("nombre completo", nameLocator);
-		type("validmail7", mailLocator);
-		type("newuser007", usernameLocator);
-		type("P4ssword.", passLocator);
-		type("P4ssword.", confirmLocator);
-		click(checkboxLocator);
-		submit(submitLocator);
+	public String wrongPassLenght() {
+		waitAlert();
+		return getMessage();
+	}
+	
+	public String wrongPassCriteria() {
+		waitAlert();
+		return getMessage();
 	}
 	
 	public String userNotRegistered() {
