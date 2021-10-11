@@ -82,6 +82,10 @@ public class Base {
 	public void click(By locator) {
 		driver.findElement(locator).click();
 	}
+	
+	public void submit(By locator) {
+		driver.findElement(locator).submit();
+	}
 
 	public Boolean isDisplayed(By locator) {
 		try {
@@ -117,6 +121,15 @@ public class Base {
 
 	public void waitElement(By locator) {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+	}
+	
+	public void waitAlert() {
+		WebDriverWait waits = new WebDriverWait(driver, 1);
+		waits.until(ExpectedConditions.alertIsPresent());
+	}
+	
+	public String getMessage() {
+		return driver.switchTo().alert().getText();
 	}
 
 }
