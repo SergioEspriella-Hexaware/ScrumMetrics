@@ -3,6 +3,7 @@ package pages;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -18,6 +19,7 @@ public class Base {
 
 	private WebDriver driver;
 	private WebDriverWait wait;
+	private JavascriptExecutor js;
 
 	public Base(WebDriver driver) {
 		this.driver = driver;
@@ -37,6 +39,8 @@ public class Base {
 	public WebDriver edgeDriverConnection() {
 		System.setProperty("webdriver.edge.driver", "./drivers/msedgedriver.exe");
 		driver = new EdgeDriver();
+		wait = new WebDriverWait(driver, 50);
+		js = (JavascriptExecutor) driver;
 		return driver;
 	}
 
@@ -123,6 +127,10 @@ public class Base {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 	}
 
+	public void waitElementClickable(By locator) {
+		wait.until(ExpectedConditions.elementToBeClickable(locator));
+	}
+
 	public void waitAlert() {
 		WebDriverWait waits = new WebDriverWait(driver, 1);
 		waits.until(ExpectedConditions.alertIsPresent());
@@ -134,6 +142,14 @@ public class Base {
 
 	public String getURL() {
 		return driver.getCurrentUrl();
+	}
+
+	public void scroll(int horizontal, int vertical) {
+		js.executeScript("window.scrollBy(" + horizontal + "," + vertical + ")");
+	}
+
+	public void scrollElement(By locator) {
+		js.executeScript("arguments[0].scrollIntoView();", findElement(locator));
 	}
 
 }
