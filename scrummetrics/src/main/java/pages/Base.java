@@ -39,13 +39,13 @@ public class Base {
 		driver = new EdgeDriver();
 		return driver;
 	}
-	
+
 	public WebDriver chromeDriverConnection() {
 		System.setProperty("webdriver.chrome.driver", "./drivers/chromedriver.exe");
 		driver = new ChromeDriver();
 		return driver;
 	}
-	
+
 	public WebDriver firefoxDriverConnection() {
 		System.setProperty("webdriver.gecko.driver", "./drivers/geckodriver.exe");
 		driver = new FirefoxDriver();
@@ -82,7 +82,7 @@ public class Base {
 	public void click(By locator) {
 		driver.findElement(locator).click();
 	}
-	
+
 	public void submit(By locator) {
 		driver.findElement(locator).submit();
 	}
@@ -122,14 +122,18 @@ public class Base {
 	public void waitElement(By locator) {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 	}
-	
+
 	public void waitAlert() {
 		WebDriverWait waits = new WebDriverWait(driver, 1);
 		waits.until(ExpectedConditions.alertIsPresent());
 	}
-	
+
 	public String getMessage() {
 		return driver.switchTo().alert().getText();
+	}
+
+	public String getURL() {
+		return driver.getCurrentUrl();
 	}
 
 }
