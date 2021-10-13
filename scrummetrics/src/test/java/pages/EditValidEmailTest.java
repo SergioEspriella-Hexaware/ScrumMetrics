@@ -73,6 +73,7 @@ public class EditValidEmailTest {
 
 	@After
 	public void tearDown() throws Exception {
+		driver.close();
 	}
 
 	@Test

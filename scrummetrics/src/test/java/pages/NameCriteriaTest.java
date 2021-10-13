@@ -73,6 +73,7 @@ public class NameCriteriaTest {
 
 	@After
 	public void tearDown() throws Exception {
+		driver.close();
 	}
 
 	@Test

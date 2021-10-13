@@ -73,6 +73,7 @@ public class PasswordCriteriaTest {
 
 	@After
 	public void tearDown() throws Exception {
+		driver.close();
 	}
 
 	@Test
