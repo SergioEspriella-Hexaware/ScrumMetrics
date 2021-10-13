@@ -7,7 +7,6 @@ public class UserRegistration extends Base{
 
 	public UserRegistration(WebDriver driver) {
 		super(driver);
-		// TODO Auto-generated constructor stub
 	}
 	
 	By nameLocator = By.id("mat-input-0");

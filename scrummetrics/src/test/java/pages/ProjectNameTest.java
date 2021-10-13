@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -33,19 +36,23 @@ public class ProjectNameTest {
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
 		List<Object[]> args = new ArrayList<>();
 
-		InputStream inp = new FileInputStream("excel/Login.xlsx");
+		InputStream inp = new FileInputStream("excel/ProjectCreation.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
 		Sheet sheet = wb.getSheetAt(0);
 		DataFormatter formatter = new DataFormatter();
 
-		int row = 1;
+		int rowNo = 1;
+
 		while (true) {
 			try {
-				String username = formatter.formatCellValue(sheet.getRow(row).getCell(0));
-				String password = formatter.formatCellValue(sheet.getRow(row).getCell(1));
+				String username = formatter.formatCellValue(sheet.getRow(rowNo).getCell(0));
+				String password = formatter.formatCellValue(sheet.getRow(rowNo).getCell(1));
+
+				if (username == "" && password == "")
+					break;
 
 				args.add(new Object[] { username, password });
-				row++;
+				rowNo++;
 			} catch (Exception e) {
 				break;
 			}
@@ -69,7 +76,7 @@ public class ProjectNameTest {
 
 	@After
 	public void tearDown() throws Exception {
-		driver.close();
+//		driver.close();
 	}
 
 	@Test
