@@ -23,19 +23,19 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Parameterized.class)
-public class NameCriteriaTest {
+public class EditNameCriteriaTest {
 	
 	private WebDriver driver;
-	UserRegistration ur;
+	EditProfile ep;
 	private final String name, email, username, password;
-
+	
 	@Parameterized.Parameters(name = "using a={0}")
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
 		List<Object[]> args = new ArrayList<>();
 
 		InputStream inp = new FileInputStream("excel/ValidEmailUsrReg.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(5);
+		Sheet sheet = wb.getSheetAt(7);
 		DataFormatter formatter = new DataFormatter();
 
 		int row = 1;
@@ -56,7 +56,7 @@ public class NameCriteriaTest {
 		return args;
 	}
 	
-	public NameCriteriaTest(String a, String b, String c, String d) {
+	public EditNameCriteriaTest(String a, String b, String c, String d) {
 		this.name = a;
 		this.email = b;
 		this.username = c;
@@ -65,9 +65,9 @@ public class NameCriteriaTest {
 
 	@Before
 	public void setUp() throws Exception {
-		ur = new UserRegistration(driver);
-		driver = ur.firefoxDriverConnection();
-		ur.visit("https://scrum-metrics.herokuapp.com/start/register");
+		ep = new EditProfile(driver);
+		driver = ep.firefoxDriverConnection();
+		ep.visit("https://scrum-metrics.herokuapp.com/start/login");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
@@ -77,8 +77,8 @@ public class NameCriteriaTest {
 
 	@Test
 	public void test() {
-		ur.fillUserRegistration(name, email, username, password);
-		assertEquals("Name must not have numbers or special characters", ur.wrongNameCriteria());
+		ep.EditName(name, email, username, password);
+		assertEquals("Name must not have numbers or special characters", ep.wrongNameCriteria());
 	}
 
 }
