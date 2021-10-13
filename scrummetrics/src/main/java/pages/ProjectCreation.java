@@ -24,12 +24,15 @@ public class ProjectCreation extends Base {
 			"//*[@id=\"fulldialog\"]/form/div[1]/div/div[2]/div/div[1]/mat-form-field/div/div[1]/div[2]/mat-datepicker-toggle/button");
 
 	By startDate;
-	//By startDate = By.cssSelector("td[aria-label=\"13 October 2021\"]");
+	// By startDate = By.cssSelector("td[aria-label=\"13 October 2021\"]");
 	By endDateCheck = By.cssSelector("label[for=\"endbutt-input\"]");
 	// TODO improve end date xpath
 	By endDateButton = By.xpath("//*[@id=\"picker2\"]/div/div[1]/div[2]/mat-datepicker-toggle/button");
 	By endDate;
-	//By endDate = By.xpath("//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr[3]/td[5]");
+	// By endDate =
+	// By.xpath("//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr[3]/td[5]");
+	By createButtonLocator = By.id("createbutt");
+	By noNameError = By.id("mat-error-3");
 
 	public void fillLogin(String username, String password) {
 		type(username, usernameLocator);
@@ -39,27 +42,41 @@ public class ProjectCreation extends Base {
 
 	public void newProject(String name, String description, String SDate) {
 		click(newProjectLocator);
+		type(name, nameLocator);
+		type(description, descriptionLocator);
 		scrollElement(startDateButtonLocator);
-
 		click(startDateButtonLocator);
-		startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
+		startDate = By.cssSelector("td[aria-label=\"" + SDate + "\"]");
 		click(startDate);
-		click(endDateCheck);
-		click(endDateButton);
-		click(endDate);
+		submit(createButtonLocator);
 	}
-	
+
 	public void newProject(String name, String description, String SDate, String EDate) {
 		click(newProjectLocator);
+		type(name, nameLocator);
+		type(description, descriptionLocator);
 		scrollElement(startDateButtonLocator);
-
 		click(startDateButtonLocator);
-		startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
-		endDate = By.cssSelector("td[aria-label=\""+ EDate + "\"]");
+		startDate = By.cssSelector("td[aria-label=\"" + SDate + "\"]");
+		endDate = By.cssSelector("td[aria-label=\"" + EDate + "\"]");
 		click(startDate);
 		click(endDateCheck);
 		click(endDateButton);
 		click(endDate);
+		submit(createButtonLocator);
+	}
+
+	public boolean isNameErrorDisplayed() {
+		return isDisplayed(noNameError);
+	}
+
+	public String onProjectCreated() {
+		try {
+			waitAlert();
+		} catch (Exception e) {
+			return "Project not created";
+		}
+		return getMessage();
 	}
 
 }

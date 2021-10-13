@@ -11,10 +11,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -30,9 +27,9 @@ public class ProjectNameTest {
 
 	private WebDriver driver;
 	ProjectCreation pc;
-	private final String username, password;
+	private final String username, password, name, description, startDate;
 
-	@Parameterized.Parameters(name = "using user={0} pass={1}")
+	@Parameterized.Parameters(name = "using name={2} desc={3}")
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
 		List<Object[]> args = new ArrayList<>();
 
@@ -47,11 +44,14 @@ public class ProjectNameTest {
 			try {
 				String username = formatter.formatCellValue(sheet.getRow(rowNo).getCell(0));
 				String password = formatter.formatCellValue(sheet.getRow(rowNo).getCell(1));
+				String name = formatter.formatCellValue(sheet.getRow(rowNo).getCell(2));
+				String description = formatter.formatCellValue(sheet.getRow(rowNo).getCell(3));
+				String startDate = formatter.formatCellValue(sheet.getRow(rowNo).getCell(4));
 
 				if (username == "" && password == "")
 					break;
 
-				args.add(new Object[] { username, password });
+				args.add(new Object[] { username, password, name, description, startDate });
 				rowNo++;
 			} catch (Exception e) {
 				break;
@@ -61,9 +61,12 @@ public class ProjectNameTest {
 		return args;
 	}
 
-	public ProjectNameTest(String a, String b) {
+	public ProjectNameTest(String a, String b, String c, String d, String e) {
 		this.username = a;
 		this.password = b;
+		this.name = c;
+		this.description = d;
+		this.startDate = e;
 	}
 
 	@Before
@@ -76,13 +79,18 @@ public class ProjectNameTest {
 
 	@After
 	public void tearDown() throws Exception {
-//		driver.close();
+		driver.close();
 	}
 
 	@Test
 	public void test() throws InterruptedException {
 		pc.fillLogin(username, password);
-		pc.newProject();
+		pc.newProject(name, description, startDate);
+		if (name == "") {
+			assertTrue(pc.isNameErrorDisplayed());
+		} else {
+			assertEquals("Project created succesfully", pc.onProjectCreated());
+		}
 		Thread.sleep(10000);
 	}
 
