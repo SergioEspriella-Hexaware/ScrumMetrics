@@ -28,7 +28,8 @@ public class ProjectCreation extends Base {
 	By endDateCheck = By.cssSelector("label[for=\"endbutt-input\"]");
 	// TODO improve end date xpath
 	By endDateButton = By.xpath("//*[@id=\"picker2\"]/div/div[1]/div[2]/mat-datepicker-toggle/button");
-	By endDate = By.xpath("//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr[3]/td[5]");
+	By endDate;
+	//By endDate = By.xpath("//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr[3]/td[5]");
 
 	public void fillLogin(String username, String password) {
 		type(username, usernameLocator);
@@ -36,19 +37,29 @@ public class ProjectCreation extends Base {
 		submit(loginLocator);
 	}
 
-	public void newProject() {
+	public void newProject(String name, String description, String SDate) {
 		click(newProjectLocator);
 		scrollElement(startDateButtonLocator);
 
 		click(startDateButtonLocator);
+		startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
 		click(startDate);
 		click(endDateCheck);
 		click(endDateButton);
 		click(endDate);
 	}
 	
-	public void setStartDate (String date) {
-		startDate = By.cssSelector("td[aria-label=\""+ date + "\"]");
+	public void newProject(String name, String description, String SDate, String EDate) {
+		click(newProjectLocator);
+		scrollElement(startDateButtonLocator);
+
+		click(startDateButtonLocator);
+		startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
+		endDate = By.cssSelector("td[aria-label=\""+ EDate + "\"]");
+		click(startDate);
+		click(endDateCheck);
+		click(endDateButton);
+		click(endDate);
 	}
 
 }
