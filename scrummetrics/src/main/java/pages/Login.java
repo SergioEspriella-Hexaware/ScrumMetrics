@@ -7,7 +7,6 @@ public class Login extends Base{
 
 	public Login(WebDriver driver) {
 		super(driver);
-		// TODO Auto-generated constructor stub
 	}
 	
 	By usernameLocator = By.id("mat-input-0");

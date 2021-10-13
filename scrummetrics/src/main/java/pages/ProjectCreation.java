@@ -7,7 +7,6 @@ public class ProjectCreation extends Base {
 
 	public ProjectCreation(WebDriver driver) {
 		super(driver);
-		// TODO Auto-generated constructor stub
 	}
 
 	By usernameLocator = By.id("mat-input-0");
@@ -20,8 +19,15 @@ public class ProjectCreation extends Base {
 	By roleSelectLocator = By.id("mat-input-4");
 	By memberUsernameLocator = By.id("mat-input-5");
 	By addMemberLocator = By.cssSelector("a[_ngcontent-xvp-c20]");
+	// TODO improve start date xpath
 	By startDateButtonLocator = By.xpath(
 			"//*[@id=\"fulldialog\"]/form/div[1]/div/div[2]/div/div[1]/mat-form-field/div/div[1]/div[2]/mat-datepicker-toggle/button");
+
+	By startDate = By.cssSelector("td[aria-label=\"13 October 2021\"]");
+	By endDateCheck = By.cssSelector("label[for=\"endbutt-input\"]");
+	// TODO improve end date xpath
+	By endDateButton = By.xpath("//*[@id=\"picker2\"]/div/div[1]/div[2]/mat-datepicker-toggle/button");
+	By endDate = By.xpath("//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr[3]/td[5]");
 
 	public void fillLogin(String username, String password) {
 		type(username, usernameLocator);
@@ -32,8 +38,12 @@ public class ProjectCreation extends Base {
 	public void newProject() {
 		click(newProjectLocator);
 		scrollElement(startDateButtonLocator);
-		
+
 		click(startDateButtonLocator);
+		click(startDate);
+		click(endDateCheck);
+		click(endDateButton);
+		click(endDate);
 	}
 
 }
