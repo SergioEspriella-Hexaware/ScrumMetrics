@@ -23,7 +23,8 @@ public class ProjectCreation extends Base {
 	By startDateButtonLocator = By.xpath(
 			"//*[@id=\"fulldialog\"]/form/div[1]/div/div[2]/div/div[1]/mat-form-field/div/div[1]/div[2]/mat-datepicker-toggle/button");
 
-	By startDate = By.cssSelector("td[aria-label=\"13 October 2021\"]");
+	By startDate;
+	//By startDate = By.cssSelector("td[aria-label=\"13 October 2021\"]");
 	By endDateCheck = By.cssSelector("label[for=\"endbutt-input\"]");
 	// TODO improve end date xpath
 	By endDateButton = By.xpath("//*[@id=\"picker2\"]/div/div[1]/div[2]/mat-datepicker-toggle/button");
@@ -44,6 +45,10 @@ public class ProjectCreation extends Base {
 		click(endDateCheck);
 		click(endDateButton);
 		click(endDate);
+	}
+	
+	public void setStartDate (String date) {
+		startDate = By.cssSelector("td[aria-label=\""+ date + "\"]");
 	}
 
 }
