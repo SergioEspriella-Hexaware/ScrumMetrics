@@ -23,7 +23,7 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Parameterized.class)
-public class UserRegistrationInvalidEmailTest {
+public class NameCriteriaTest {
 	
 	private WebDriver driver;
 	UserRegistration ur;
@@ -35,7 +35,7 @@ public class UserRegistrationInvalidEmailTest {
 
 		InputStream inp = new FileInputStream("excel/ValidEmailUsrReg.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(1);
+		Sheet sheet = wb.getSheetAt(5);
 		DataFormatter formatter = new DataFormatter();
 
 		int row = 1;
@@ -56,7 +56,7 @@ public class UserRegistrationInvalidEmailTest {
 		return args;
 	}
 	
-	public UserRegistrationInvalidEmailTest(String a, String b, String c, String d) {
+	public NameCriteriaTest(String a, String b, String c, String d) {
 		this.name = a;
 		this.email = b;
 		this.username = c;
@@ -79,7 +79,7 @@ public class UserRegistrationInvalidEmailTest {
 	@Test
 	public void test() {
 		ur.fillUserRegistration(name, email, username, password);
-		assertEquals("email not valid", ur.userNotRegistered());
+		assertEquals("Name must not have numbers or special characters", ur.wrongNameCriteria());
 	}
 
 }
