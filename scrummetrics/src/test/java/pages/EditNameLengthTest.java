@@ -79,7 +79,7 @@ public class EditNameLengthTest {
 	public void test() {
 		ep.EditName(name, email, username, password);
 		if (name.isEmpty()) {
-			assertEquals("You need to enter a name.", ep.wrongNameLength());
+			assertEquals("You can't leave this blank", ep.wrongNameLength());
 		}
 		else
 			assertEquals("name must be less than 256 characters", ep.wrongNameLength());
