@@ -30,6 +30,10 @@ public class ProjectCreation extends Base {
 	By endDateButton = By.xpath("//*[@id=\"picker2\"]/div/div[1]/div[2]/mat-datepicker-toggle/button");
 	By endDate;
 	//By endDate = By.xpath("//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr[3]/td[5]");
+	//By dateRequiredLocator = By.id("mat-error-11");
+	By dateRequiredLocator = By.xpath("//mat-error[@class='mat-error ng-star-inserted']");
+	By createButtonLocator = By.id("createbutt");
+	By startDateInputLocator = By.xpath("//input[@name='inDate1']");
 
 	public void fillLogin(String username, String password) {
 		type(username, usernameLocator);
@@ -37,16 +41,33 @@ public class ProjectCreation extends Base {
 		submit(loginLocator);
 	}
 
-	public void newProject(String name, String description, String SDate) {
+	public void newProjectDateTest(String name, String description, String SDate) {
 		click(newProjectLocator);
-		scrollElement(startDateButtonLocator);
+		type(name, nameLocator);
+		type(description, descriptionLocator);
+		
+		if (!SDate.isEmpty()) {
+			scrollElement(startDateButtonLocator);
 
-		click(startDateButtonLocator);
-		startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
-		click(startDate);
-		click(endDateCheck);
-		click(endDateButton);
-		click(endDate);
+			click(startDateButtonLocator);
+			startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
+			click(startDate);
+		}
+		submit(createButtonLocator);
+	}
+	
+	public void newProjectDateFormatTest(String name, String description, String SDate) {
+		click(newProjectLocator);
+		type(name, nameLocator);
+		type(description, descriptionLocator);
+		
+		if (!SDate.isEmpty()) {
+			scrollElement(startDateButtonLocator);
+
+			click(startDateButtonLocator);
+			startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
+			click(startDate);
+		}
 	}
 	
 	public void newProject(String name, String description, String SDate, String EDate) {
@@ -60,6 +81,25 @@ public class ProjectCreation extends Base {
 		click(endDateCheck);
 		click(endDateButton);
 		click(endDate);
+	}
+	
+	public String noStartDateValidation() {
+		scrollElement(dateRequiredLocator);
+		if (isDisplayed(dateRequiredLocator)) {
+			return getText(dateRequiredLocator);
+		} else {
+			waitAlert();
+			return getMessage();
+		}
+	}
+	
+	public String startDateValidation() {		
+		waitAlert();
+		return getMessage();
+	}
+	
+	public String startDateFormatValidation() {		
+		return getValue(startDateInputLocator);
 	}
 
 }

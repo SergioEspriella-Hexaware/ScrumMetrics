@@ -53,6 +53,8 @@ public class Base {
 	public WebDriver firefoxDriverConnection() {
 		System.setProperty("webdriver.gecko.driver", "./drivers/geckodriver.exe");
 		driver = new FirefoxDriver();
+		wait = new WebDriverWait(driver, 50);
+		js = (JavascriptExecutor) driver;
 		return driver;
 	}
 
@@ -150,6 +152,10 @@ public class Base {
 
 	public void scrollElement(By locator) {
 		js.executeScript("arguments[0].scrollIntoView();", findElement(locator));
+	}
+	
+	public String getValue(By locator) {
+		return driver.findElement(locator).getAttribute("value");
 	}
 
 }
