@@ -33,21 +33,61 @@ public class ProjectCreation extends Base {
 	// By.xpath("//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr[3]/td[5]");
 	By createButtonLocator = By.id("createbutt");
 	By noNameError = By.id("mat-error-3");
+	//By dateRequiredLocator = By.id("mat-error-11");
+	By missingFieldLocator = By.xpath("//mat-error[@class='mat-error ng-star-inserted']");
+	//By createButtonLocator = By.id("createbutt");
+	By startDateInputLocator = By.xpath("//input[@name='inDate1']");
 
 	public void fillLogin(String username, String password) {
 		type(username, usernameLocator);
 		type(password, passLocator);
 		submit(loginLocator);
 	}
-
-	public void newProject(String name, String description, String SDate) {
+	
+	//TODO
+	public void nonUserTest(String name, String description, String SDate) {
 		click(newProjectLocator);
 		type(name, nameLocator);
 		type(description, descriptionLocator);
-		scrollElement(startDateButtonLocator);
+		
+		if (!SDate.isEmpty()) {
+			scrollElement(startDateButtonLocator);
+
+			click(startDateButtonLocator);
+			startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
+			click(startDate);
+		}
+		//submit(createButtonLocator);
+	}
+
+	public void newProjectDateTest(String name, String description, String SDate) {
+		click(newProjectLocator);
+		type(name, nameLocator);
+		type(description, descriptionLocator);
+		
+		if (!SDate.isEmpty()) {
+			scrollElement(startDateButtonLocator);
+
+			click(startDateButtonLocator);
+			startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
+			click(startDate);
+		}
+		submit(createButtonLocator);
+	}
+	
+	public void newProjectDateFormatTest(String name, String description, String SDate) {
+		click(newProjectLocator);
+		type(name, nameLocator);
+		type(description, descriptionLocator);
+		//type(name, nameLocator);
+		//type(description, descriptionLocator);
+		
+		if (!SDate.isEmpty()) {
+			scrollElement(startDateButtonLocator);
 		click(startDateButtonLocator);
 		startDate = By.cssSelector("td[aria-label=\"" + SDate + "\"]");
 		click(startDate);
+		}
 		submit(createButtonLocator);
 	}
 
@@ -77,6 +117,40 @@ public class ProjectCreation extends Base {
 			return "Project not created";
 		}
 		return getMessage();
+	}
+	
+	public String noStartDateValidation() {
+		scrollElement(missingFieldLocator);
+		if (isDisplayed(missingFieldLocator)) {
+			return getText(missingFieldLocator);
+		} else {
+			waitAlert();
+			return getMessage();
+		}
+	}
+	
+	public String noDescriptionValidation() {
+		scrollElement(missingFieldLocator);
+		if (isDisplayed(missingFieldLocator)) {
+			return getText(missingFieldLocator);
+		} else {
+			waitAlert();
+			return getMessage();
+		}
+	}
+	
+	public String descriptionValidation() {		
+		waitAlert();
+		return getMessage();
+	}
+	
+	public String startDateValidation() {		
+		waitAlert();
+		return getMessage();
+	}
+	
+	public String startDateFormatValidation() {		
+		return getValue(startDateInputLocator);
 	}
 
 }

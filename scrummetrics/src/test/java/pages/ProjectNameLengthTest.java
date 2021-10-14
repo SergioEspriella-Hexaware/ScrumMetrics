@@ -85,7 +85,7 @@ public class ProjectNameLengthTest {
 	@Test
 	public void test() throws InterruptedException {
 		pc.fillLogin(username, password);
-		pc.newProject(name, description, startDate);
+		pc.newProjectDateFormatTest(name, description, startDate);
 		if (name.length() < 8 || name.length() > 64) {
 			assertTrue(pc.isNameErrorDisplayed());
 		} else {
