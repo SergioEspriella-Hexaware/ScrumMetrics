@@ -16,9 +16,10 @@ public class ProjectCreation extends Base {
 	By newProjectLocator = By.cssSelector("a[ng-reflect-message=\"Create a new project!\"]");
 	By nameLocator = By.id("mat-input-2");
 	By descriptionLocator = By.id("mat-input-3");
-	By roleSelectLocator = By.id("mat-input-4");
-	By memberUsernameLocator = By.id("mat-input-5");
-	By addMemberLocator = By.cssSelector("a[_ngcontent-xvp-c20]");
+	By roleSelectLocator;
+	By memberUsernameLocator = By.xpath("//input[@class='mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored ng-untouched ng-pristine ng-valid']");
+	//By addMemberLocator = By.cssSelector("a[_ngcontent-xvp-c20]");
+	By addMemberLocator = By.xpath("//span[contains(text(),'Add')]");
 	// TODO improve start date xpath
 	By startDateButtonLocator = By.xpath(
 			"//*[@id=\"fulldialog\"]/form/div[1]/div/div[2]/div/div[1]/mat-form-field/div/div[1]/div[2]/mat-datepicker-toggle/button");
@@ -38,26 +39,53 @@ public class ProjectCreation extends Base {
 	// By createButtonLocator = By.id("createbutt");
 	By startDateInputLocator = By.xpath("//input[@name='inDate1']");
 	By endDateInputLocator = By.xpath("//input[@name='inDate2']");
+	By memberNameListLocator = By.xpath("//mat-panel-title[@class='mat-expansion-panel-header-title']");
+	By memberListLocator = By.xpath("//mat-expansion-panel-header");
 
 	public void fillLogin(String username, String password) {
 		type(username, usernameLocator);
 		type(password, passLocator);
 		submit(loginLocator);
 	}
-
-	// TODO
-	public void nonUserTest(String name, String description, String sDate) {
+	
+	//TODO
+	public void nonUserTest(String name, String description, String SDate, String role, String member) {
+		click(newProjectLocator);
+		type(name, nameLocator);
+		type(description, descriptionLocator);
+		
+		roleSelectLocator = By.xpath("//option[@value='"+ role + "']");
+		click(roleSelectLocator);
+		type(member, memberUsernameLocator);
+		click(addMemberLocator);
+//		if (!SDate.isEmpty()) {
+//			scrollElement(startDateButtonLocator);
+//
+//			click(startDateButtonLocator);
+//			startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
+//			click(startDate);
+//		}
+		//submit(createButtonLocator);
+	}
+	
+	public void memberUserTest(String name, String description, String SDate, String role, String member) {
 		click(newProjectLocator);
 		type(name, nameLocator);
 		type(description, descriptionLocator);
 
-		if (!sDate.isEmpty()) {
-			scrollElement(startDateButtonLocator);
-
-			click(startDateButtonLocator);
-			startDate = By.cssSelector("td[aria-label=\"" + sDate + "\"]");
-			click(startDate);
-		}
+		roleSelectLocator = By.xpath("//option[@value='" + role + "']");
+		click(roleSelectLocator);
+		type(member, memberUsernameLocator);
+		click(addMemberLocator);
+		scrollElement(memberListLocator);
+		click(memberListLocator);
+//		if (!SDate.isEmpty()) {
+//			scrollElement(startDateButtonLocator);
+//
+//			click(startDateButtonLocator);
+//			startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
+//			click(startDate);
+//		}
 		// submit(createButtonLocator);
 	}
 
@@ -134,6 +162,14 @@ public class ProjectCreation extends Base {
 		return getMessage();
 	}
 
+	public String memberValidation() {
+		if (isDisplayed(memberNameListLocator)) {
+			return getText(memberNameListLocator);
+		} else {
+			return "";
+		}
+	}
+	
 	public String noStartDateValidation() {
 		scrollElement(missingFieldLocator);
 		if (isDisplayed(missingFieldLocator)) {
