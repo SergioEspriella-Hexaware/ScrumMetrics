@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -23,36 +25,33 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Parameterized.class)
-public class ProjectNameTest {
+public class ProjectEndDateFormatTest {
 
 	private WebDriver driver;
 	ProjectCreation pc;
-	private final String username, password, name, description, startDate;
+	private final String username, password, projectName, description, startDate, endDate;
 
-	@Parameterized.Parameters(name = "using name={2} desc={3}")
+	@Parameterized.Parameters(name = "using endDate={5}")
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
 		List<Object[]> args = new ArrayList<>();
 
 		InputStream inp = new FileInputStream("excel/ProjectCreation.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(0);
+		Sheet sheet = wb.getSheetAt(2);
 		DataFormatter formatter = new DataFormatter();
 
-		int rowNo = 1;
-
+		int row = 1;
 		while (true) {
 			try {
-				String username = formatter.formatCellValue(sheet.getRow(rowNo).getCell(0));
-				String password = formatter.formatCellValue(sheet.getRow(rowNo).getCell(1));
-				String name = formatter.formatCellValue(sheet.getRow(rowNo).getCell(2));
-				String description = formatter.formatCellValue(sheet.getRow(rowNo).getCell(3));
-				String startDate = formatter.formatCellValue(sheet.getRow(rowNo).getCell(4));
+				String username = formatter.formatCellValue(sheet.getRow(row).getCell(0));
+				String password = formatter.formatCellValue(sheet.getRow(row).getCell(1));
+				String projectName = formatter.formatCellValue(sheet.getRow(row).getCell(2));
+				String description = formatter.formatCellValue(sheet.getRow(row).getCell(3));
+				String startDate = formatter.formatCellValue(sheet.getRow(row).getCell(4));
+				String endDate = formatter.formatCellValue(sheet.getRow(row).getCell(5));
 
-				if (username == "" && password == "")
-					break;
-
-				args.add(new Object[] { username, password, name, description, startDate });
-				rowNo++;
+				args.add(new Object[] { username, password, projectName, description, startDate, endDate });
+				row++;
 			} catch (Exception e) {
 				break;
 			}
@@ -61,12 +60,13 @@ public class ProjectNameTest {
 		return args;
 	}
 
-	public ProjectNameTest(String a, String b, String c, String d, String e) {
+	public ProjectEndDateFormatTest(String a, String b, String c, String d, String e, String f) {
 		this.username = a;
 		this.password = b;
-		this.name = c;
+		this.projectName = c;
 		this.description = d;
 		this.startDate = e;
+		this.endDate = f;
 	}
 
 	@Before
@@ -83,15 +83,12 @@ public class ProjectNameTest {
 	}
 
 	@Test
-	public void test() throws InterruptedException {
+	public void test() {
 		pc.fillLogin(username, password);
-		pc.newProjectDateFormatTest(name, description, startDate);
-		if (name == "") {
-			assertTrue(pc.isNameErrorDisplayed());
-		} else {
-			assertEquals("Project created succesfully", pc.onProjectCreated());
-		}
-		Thread.sleep(10000);
+		pc.newProject(projectName, description, startDate, endDate);
+		Pattern patron = Pattern.compile("[0-9]{2}/[0-9]{2}/[0-9]{4}");
+		Matcher mat = patron.matcher(pc.endDateFormatValidation());
+		assertTrue(mat.matches());
 	}
 
 }

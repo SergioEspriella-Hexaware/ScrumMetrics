@@ -33,77 +33,92 @@ public class ProjectCreation extends Base {
 	// By.xpath("//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr[3]/td[5]");
 	By createButtonLocator = By.id("createbutt");
 	By noNameError = By.id("mat-error-3");
-	//By dateRequiredLocator = By.id("mat-error-11");
+	// By dateRequiredLocator = By.id("mat-error-11");
 	By missingFieldLocator = By.xpath("//mat-error[@class='mat-error ng-star-inserted']");
-	//By createButtonLocator = By.id("createbutt");
+	// By createButtonLocator = By.id("createbutt");
 	By startDateInputLocator = By.xpath("//input[@name='inDate1']");
+	By endDateInputLocator = By.xpath("//input[@name='inDate2']");
 
 	public void fillLogin(String username, String password) {
 		type(username, usernameLocator);
 		type(password, passLocator);
 		submit(loginLocator);
 	}
-	
-	//TODO
-	public void nonUserTest(String name, String description, String SDate) {
+
+	// TODO
+	public void nonUserTest(String name, String description, String sDate) {
 		click(newProjectLocator);
 		type(name, nameLocator);
 		type(description, descriptionLocator);
-		
-		if (!SDate.isEmpty()) {
+
+		if (!sDate.isEmpty()) {
 			scrollElement(startDateButtonLocator);
 
 			click(startDateButtonLocator);
-			startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
+			startDate = By.cssSelector("td[aria-label=\"" + sDate + "\"]");
 			click(startDate);
 		}
-		//submit(createButtonLocator);
+		// submit(createButtonLocator);
 	}
 
-	public void newProjectDateTest(String name, String description, String SDate) {
+	public void newProjectDateTest(String name, String description, String sDate) {
 		click(newProjectLocator);
 		type(name, nameLocator);
 		type(description, descriptionLocator);
-		
-		if (!SDate.isEmpty()) {
+
+		if (!sDate.isEmpty()) {
 			scrollElement(startDateButtonLocator);
 
 			click(startDateButtonLocator);
-			startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
+			startDate = By.cssSelector("td[aria-label=\"" + sDate + "\"]");
 			click(startDate);
 		}
 		submit(createButtonLocator);
 	}
-	
-	public void newProjectDateFormatTest(String name, String description, String SDate) {
+
+	public void newProjectDateFormatTest(String name, String description, String sDate) {
 		click(newProjectLocator);
 		type(name, nameLocator);
 		type(description, descriptionLocator);
-		//type(name, nameLocator);
-		//type(description, descriptionLocator);
-		
-		if (!SDate.isEmpty()) {
+
+		if (!sDate.isEmpty()) {
 			scrollElement(startDateButtonLocator);
-		click(startDateButtonLocator);
-		startDate = By.cssSelector("td[aria-label=\"" + SDate + "\"]");
-		click(startDate);
+			click(startDateButtonLocator);
+			startDate = By.cssSelector("td[aria-label=\"" + sDate + "\"]");
+			click(startDate);
 		}
 		submit(createButtonLocator);
 	}
 
-	public void newProject(String name, String description, String SDate, String EDate) {
+	public void newProject(String name, String description, String sDate, String eDate) {
 		click(newProjectLocator);
 		type(name, nameLocator);
 		type(description, descriptionLocator);
 		scrollElement(startDateButtonLocator);
 		click(startDateButtonLocator);
-		startDate = By.cssSelector("td[aria-label=\"" + SDate + "\"]");
-		endDate = By.cssSelector("td[aria-label=\"" + EDate + "\"]");
+		startDate = By.cssSelector("td[aria-label=\"" + sDate + "\"]");
+		endDate = By.xpath(
+				"//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr/td[@aria-label='" + eDate + "']");
 		click(startDate);
 		click(endDateCheck);
 		click(endDateButton);
 		click(endDate);
 		submit(createButtonLocator);
+	}
+
+	public void fillNewProject(String name, String description, String sDate, String eDate) {
+		click(newProjectLocator);
+		type(name, nameLocator);
+		type(description, descriptionLocator);
+		scrollElement(startDateButtonLocator);
+		click(startDateButtonLocator);
+		startDate = By.cssSelector("td[aria-label=\"" + sDate + "\"]");
+		endDate = By.xpath(
+				"//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr/td[@aria-label='" + eDate + "']");
+		click(startDate);
+		click(endDateCheck);
+		click(endDateButton);
+		click(endDate);
 	}
 
 	public boolean isNameErrorDisplayed() {
@@ -118,7 +133,7 @@ public class ProjectCreation extends Base {
 		}
 		return getMessage();
 	}
-	
+
 	public String noStartDateValidation() {
 		scrollElement(missingFieldLocator);
 		if (isDisplayed(missingFieldLocator)) {
@@ -128,7 +143,7 @@ public class ProjectCreation extends Base {
 			return getMessage();
 		}
 	}
-	
+
 	public String noDescriptionValidation() {
 		scrollElement(missingFieldLocator);
 		if (isDisplayed(missingFieldLocator)) {
@@ -138,19 +153,23 @@ public class ProjectCreation extends Base {
 			return getMessage();
 		}
 	}
-	
-	public String descriptionValidation() {		
+
+	public String descriptionValidation() {
 		waitAlert();
 		return getMessage();
 	}
-	
-	public String startDateValidation() {		
+
+	public String startDateValidation() {
 		waitAlert();
 		return getMessage();
 	}
-	
-	public String startDateFormatValidation() {		
+
+	public String startDateFormatValidation() {
 		return getValue(startDateInputLocator);
+	}
+
+	public String endDateFormatValidation() {
+		return getValue(endDateInputLocator);
 	}
 
 }
