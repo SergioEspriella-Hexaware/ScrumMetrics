@@ -17,8 +17,9 @@ public class ProjectCreation extends Base {
 	By nameLocator = By.id("mat-input-2");
 	By descriptionLocator = By.id("mat-input-3");
 	By roleSelectLocator;
-	By memberUsernameLocator = By.xpath("//input[@class='mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored ng-untouched ng-pristine ng-valid']");
-	//By addMemberLocator = By.cssSelector("a[_ngcontent-xvp-c20]");
+	By memberUsernameLocator = By.xpath(
+			"//input[@class='mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored ng-untouched ng-pristine ng-valid']");
+	// By addMemberLocator = By.cssSelector("a[_ngcontent-xvp-c20]");
 	By addMemberLocator = By.xpath("//span[contains(text(),'Add')]");
 	// TODO improve start date xpath
 	By startDateButtonLocator = By.xpath(
@@ -47,14 +48,14 @@ public class ProjectCreation extends Base {
 		type(password, passLocator);
 		submit(loginLocator);
 	}
-	
-	//TODO
+
+	// TODO
 	public void nonUserTest(String name, String description, String SDate, String role, String member) {
 		click(newProjectLocator);
 		type(name, nameLocator);
 		type(description, descriptionLocator);
-		
-		roleSelectLocator = By.xpath("//option[@value='"+ role + "']");
+
+		roleSelectLocator = By.xpath("//option[@value='" + role + "']");
 		click(roleSelectLocator);
 		type(member, memberUsernameLocator);
 		click(addMemberLocator);
@@ -65,9 +66,9 @@ public class ProjectCreation extends Base {
 //			startDate = By.cssSelector("td[aria-label=\""+ SDate + "\"]");
 //			click(startDate);
 //		}
-		//submit(createButtonLocator);
+		// submit(createButtonLocator);
 	}
-	
+
 	public void memberUserTest(String name, String description, String SDate, String role, String member) {
 		click(newProjectLocator);
 		type(name, nameLocator);
@@ -157,7 +158,7 @@ public class ProjectCreation extends Base {
 		try {
 			waitAlert();
 		} catch (Exception e) {
-			return "Project not created";
+			return "No message shown";
 		}
 		return getMessage();
 	}
@@ -169,7 +170,7 @@ public class ProjectCreation extends Base {
 			return "";
 		}
 	}
-	
+
 	public String noStartDateValidation() {
 		scrollElement(missingFieldLocator);
 		if (isDisplayed(missingFieldLocator)) {

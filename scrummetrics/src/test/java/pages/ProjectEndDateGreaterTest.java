@@ -5,12 +5,13 @@ import static org.junit.Assert.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -83,12 +84,19 @@ public class ProjectEndDateGreaterTest {
 	}
 
 	@Test
-	public void test() {
+	public void test() throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("d MMMM yyyy", Locale.US);
+		boolean isDateBefore = sdf.parse(startDate).before(sdf.parse(endDate));
+
 		pc.fillLogin(username, password);
-		pc.fillNewProject(projectName, description, startDate, endDate);
-		Pattern patron = Pattern.compile("[0-9]{2}/[0-9]{2}/[0-9]{4}");
-		Matcher mat = patron.matcher(pc.endDateFormatValidation());
-		assertTrue(mat.matches());
+		pc.newProject(projectName, description, startDate, endDate);
+
+		if (isDateBefore) {
+			assertEquals("Project created succesfully", pc.onProjectCreated());
+		} else {
+			assertEquals("End date must be lower than start date", pc.onProjectCreated());
+		}
+
 	}
 
 }
