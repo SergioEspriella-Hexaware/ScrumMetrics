@@ -23,7 +23,7 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Parameterized.class)
-public class ExistingUserTest {
+public class ProjectNonExistingUserTest {
 	
 	private WebDriver driver;
 	ProjectCreation pc;
@@ -35,7 +35,7 @@ public class ExistingUserTest {
 
 		InputStream inp = new FileInputStream("excel/ValidEmailUsrReg.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(15);
+		Sheet sheet = wb.getSheetAt(14);
 		DataFormatter formatter = new DataFormatter();
 
 		int row = 1;
@@ -59,7 +59,7 @@ public class ExistingUserTest {
 		return args;
 	}
 	
-	public ExistingUserTest(String a, String b, String c, String d, String e, String f, String g) {
+	public ProjectNonExistingUserTest(String a, String b, String c, String d, String e, String f, String g) {
 		this.username = a;
 		this.password = b;
 		this.projectName = c;
@@ -79,14 +79,14 @@ public class ExistingUserTest {
 
 	@After
 	public void tearDown() throws Exception {
-		driver.close();
 	}
 
+	//TODO
 	@Test
 	public void test() {
 		pc.fillLogin(username, password);
-		pc.memberUserTest(projectName, description, startDate, role, member);
-		assertEquals(member, pc.memberValidation());
+		pc.nonUserTest(projectName, description, startDate, role, member);
+		assertEquals("Can't find that user.", pc.descriptionValidation());
 	}
 
 }

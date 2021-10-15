@@ -23,11 +23,11 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Parameterized.class)
-public class NameCriteriaTest {
-	
+public class ProjectCreationStartDateMandatoryTest {
+
 	private WebDriver driver;
-	UserRegistration ur;
-	private final String name, email, username, password;
+	ProjectCreation pc;
+	private final String username, password, projectName, description, startDate;
 
 	@Parameterized.Parameters(name = "using a={0}")
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
@@ -35,18 +35,19 @@ public class NameCriteriaTest {
 
 		InputStream inp = new FileInputStream("excel/ValidEmailUsrReg.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(5);
+		Sheet sheet = wb.getSheetAt(10);
 		DataFormatter formatter = new DataFormatter();
 
 		int row = 1;
 		while (true) {
 			try {
-				String name = formatter.formatCellValue(sheet.getRow(row).getCell(0));
-				String email = formatter.formatCellValue(sheet.getRow(row).getCell(1));
-				String username = formatter.formatCellValue(sheet.getRow(row).getCell(2));
-				String password = formatter.formatCellValue(sheet.getRow(row).getCell(3));
+				String username = formatter.formatCellValue(sheet.getRow(row).getCell(0));
+				String password = formatter.formatCellValue(sheet.getRow(row).getCell(1));
+				String projectName = formatter.formatCellValue(sheet.getRow(row).getCell(2));
+				String description = formatter.formatCellValue(sheet.getRow(row).getCell(3));
+				String startDate = formatter.formatCellValue(sheet.getRow(row).getCell(4));
 
-				args.add(new Object[] { name, email, username, password });
+				args.add(new Object[] { username, password, projectName, description, startDate });
 				row++;
 			} catch (Exception e) {
 				break;
@@ -55,19 +56,20 @@ public class NameCriteriaTest {
 
 		return args;
 	}
-	
-	public NameCriteriaTest(String a, String b, String c, String d) {
-		this.name = a;
-		this.email = b;
-		this.username = c;
-		this.password = d;
+
+	public ProjectCreationStartDateMandatoryTest(String a, String b, String c, String d, String e) {
+		this.username = a;
+		this.password = b;
+		this.projectName = c;
+		this.description = d;
+		this.startDate = e;
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		ur = new UserRegistration(driver);
-		driver = ur.firefoxDriverConnection();
-		ur.visit("https://scrum-metrics.herokuapp.com/start/register");
+		pc = new ProjectCreation(driver);
+		driver = pc.firefoxDriverConnection();
+		pc.visit("https://scrum-metrics.herokuapp.com/start/login");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
@@ -78,8 +80,12 @@ public class NameCriteriaTest {
 
 	@Test
 	public void test() {
-		ur.fillUserRegistration(name, email, username, password);
-		assertEquals("Name must not have numbers or special characters", ur.wrongNameCriteria());
+		pc.fillLogin(username, password);
+		pc.newProjectDateTest(projectName, description, startDate);
+		if (startDate.isEmpty()) {
+			assertEquals("You need to enter an initial date.", pc.noStartDateValidation());
+		} else
+			assertEquals("Project created succesfully", pc.startDateValidation());
 	}
 
 }

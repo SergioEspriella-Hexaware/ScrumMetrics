@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -25,31 +23,30 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Parameterized.class)
-public class StartDateFormatTest {
-	
+public class UserRegistrationPasswordLengthTest {
+
 	private WebDriver driver;
-	ProjectCreation pc;
-	private final String username, password, projectName, description, startDate;
-	
+	UserRegistration ur;
+	private final String name, email, username, password;
+
 	@Parameterized.Parameters(name = "using a={0}")
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
 		List<Object[]> args = new ArrayList<>();
 
 		InputStream inp = new FileInputStream("excel/ValidEmailUsrReg.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(11);
+		Sheet sheet = wb.getSheetAt(2);
 		DataFormatter formatter = new DataFormatter();
 
 		int row = 1;
 		while (true) {
 			try {
-				String username = formatter.formatCellValue(sheet.getRow(row).getCell(0));
-				String password = formatter.formatCellValue(sheet.getRow(row).getCell(1));
-				String projectName = formatter.formatCellValue(sheet.getRow(row).getCell(2));
-				String description = formatter.formatCellValue(sheet.getRow(row).getCell(3));
-				String startDate = formatter.formatCellValue(sheet.getRow(row).getCell(4));
+				String name = formatter.formatCellValue(sheet.getRow(row).getCell(0));
+				String email = formatter.formatCellValue(sheet.getRow(row).getCell(1));
+				String username = formatter.formatCellValue(sheet.getRow(row).getCell(2));
+				String password = formatter.formatCellValue(sheet.getRow(row).getCell(3));
 
-				args.add(new Object[] { username, password, projectName, description, startDate });
+				args.add(new Object[] { name, email, username, password });
 				row++;
 			} catch (Exception e) {
 				break;
@@ -59,33 +56,30 @@ public class StartDateFormatTest {
 		return args;
 	}
 	
-	public StartDateFormatTest(String a, String b, String c, String d, String e) {
-		this.username = a;
-		this.password = b;
-		this.projectName = c;
-		this.description = d;
-		this.startDate = e;
+	public UserRegistrationPasswordLengthTest(String a, String b, String c, String d) {
+		this.name = a;
+		this.email = b;
+		this.username = c;
+		this.password = d;
 	}
-
+	
 	@Before
 	public void setUp() throws Exception {
-		pc = new ProjectCreation(driver);
-		driver = pc.firefoxDriverConnection();
-		pc.visit("https://scrum-metrics.herokuapp.com/start/login");
+		ur = new UserRegistration(driver);
+		driver = ur.firefoxDriverConnection();
+		ur.visit("https://scrum-metrics.herokuapp.com/start/register");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		driver.close();
 	}
 
 	@Test
 	public void test() {
-		pc.fillLogin(username, password);
-		pc.newProjectDateFormatTest(projectName, description, startDate);
-		Pattern patron = Pattern.compile("[0-9]{2}/[0-9]{2}/[0-9]{4}");
-	    Matcher mat = patron.matcher(pc.startDateFormatValidation());
-		assertTrue(mat.matches());
+		ur.fillUserRegistration(name, email, username, password);
+		assertEquals("password must be 8 - 12 characters", ur.wrongPassLenght());
 	}
 
 }

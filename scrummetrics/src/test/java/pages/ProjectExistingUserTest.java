@@ -23,30 +23,33 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Parameterized.class)
-public class PasswordLengthTest {
-
+public class ProjectExistingUserTest {
+	
 	private WebDriver driver;
-	UserRegistration ur;
-	private final String name, email, username, password;
-
+	ProjectCreation pc;
+	private final String username, password, projectName, description, startDate, role, member;
+	
 	@Parameterized.Parameters(name = "using a={0}")
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
 		List<Object[]> args = new ArrayList<>();
 
 		InputStream inp = new FileInputStream("excel/ValidEmailUsrReg.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(2);
+		Sheet sheet = wb.getSheetAt(15);
 		DataFormatter formatter = new DataFormatter();
 
 		int row = 1;
 		while (true) {
 			try {
-				String name = formatter.formatCellValue(sheet.getRow(row).getCell(0));
-				String email = formatter.formatCellValue(sheet.getRow(row).getCell(1));
-				String username = formatter.formatCellValue(sheet.getRow(row).getCell(2));
-				String password = formatter.formatCellValue(sheet.getRow(row).getCell(3));
+				String username = formatter.formatCellValue(sheet.getRow(row).getCell(0));
+				String password = formatter.formatCellValue(sheet.getRow(row).getCell(1));
+				String projectName = formatter.formatCellValue(sheet.getRow(row).getCell(2));
+				String description = formatter.formatCellValue(sheet.getRow(row).getCell(3));
+				String startDate = formatter.formatCellValue(sheet.getRow(row).getCell(4));
+				String role = formatter.formatCellValue(sheet.getRow(row).getCell(5));
+				String member = formatter.formatCellValue(sheet.getRow(row).getCell(6));
 
-				args.add(new Object[] { name, email, username, password });
+				args.add(new Object[] { username, password, projectName, description, startDate, role, member });
 				row++;
 			} catch (Exception e) {
 				break;
@@ -56,18 +59,21 @@ public class PasswordLengthTest {
 		return args;
 	}
 	
-	public PasswordLengthTest(String a, String b, String c, String d) {
-		this.name = a;
-		this.email = b;
-		this.username = c;
-		this.password = d;
+	public ProjectExistingUserTest(String a, String b, String c, String d, String e, String f, String g) {
+		this.username = a;
+		this.password = b;
+		this.projectName = c;
+		this.description = d;
+		this.startDate = e;
+		this.role = f;
+		this.member = g;
 	}
-	
+
 	@Before
 	public void setUp() throws Exception {
-		ur = new UserRegistration(driver);
-		driver = ur.firefoxDriverConnection();
-		ur.visit("https://scrum-metrics.herokuapp.com/start/register");
+		pc = new ProjectCreation(driver);
+		driver = pc.firefoxDriverConnection();
+		pc.visit("https://scrum-metrics.herokuapp.com/start/login");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
@@ -78,8 +84,9 @@ public class PasswordLengthTest {
 
 	@Test
 	public void test() {
-		ur.fillUserRegistration(name, email, username, password);
-		assertEquals("password must be 8 - 12 characters", ur.wrongPassLenght());
+		pc.fillLogin(username, password);
+		pc.memberUserTest(projectName, description, startDate, role, member);
+		assertEquals(member, pc.memberValidation());
 	}
 
 }

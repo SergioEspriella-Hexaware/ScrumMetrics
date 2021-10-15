@@ -23,7 +23,7 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(Parameterized.class)
-public class DescriptionLengthTest {
+public class ProjectDescriptionMandatoryTest {
 	
 	private WebDriver driver;
 	ProjectCreation pc;
@@ -35,7 +35,7 @@ public class DescriptionLengthTest {
 
 		InputStream inp = new FileInputStream("excel/ValidEmailUsrReg.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(13);
+		Sheet sheet = wb.getSheetAt(12);
 		DataFormatter formatter = new DataFormatter();
 
 		int row = 1;
@@ -57,7 +57,7 @@ public class DescriptionLengthTest {
 		return args;
 	}
 	
-	public DescriptionLengthTest(String a, String b, String c, String d, String e) {
+	public ProjectDescriptionMandatoryTest(String a, String b, String c, String d, String e) {
 		this.username = a;
 		this.password = b;
 		this.projectName = c;
@@ -81,7 +81,11 @@ public class DescriptionLengthTest {
 	public void test() {
 		pc.fillLogin(username, password);
 		pc.newProjectDateTest(projectName, description, startDate);
-		assertEquals("Description should be between 20 and 1024 characters.", pc.descriptionValidation());
+		if (description.isEmpty()) {
+			assertEquals("You need to enter a description.", pc.noDescriptionValidation());
+		}
+		else
+			assertEquals("Project created succesfully", pc.descriptionValidation());
 	}
 
 }
