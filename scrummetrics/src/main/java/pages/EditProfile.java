@@ -7,7 +7,6 @@ public class EditProfile extends Base {
 
 	public EditProfile(WebDriver driver) {
 		super(driver);
-		// TODO Auto-generated constructor stub
 	}
 	
 	By usernameLocator = By.xpath("//input[@name='inUser']");
