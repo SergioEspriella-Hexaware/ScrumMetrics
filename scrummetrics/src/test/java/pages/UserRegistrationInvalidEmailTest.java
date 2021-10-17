@@ -66,7 +66,7 @@ public class UserRegistrationInvalidEmailTest {
 	@Before
 	public void setUp() throws Exception {
 		ur = new UserRegistration(driver);
-		driver = ur.chromeDriverConnection();
+		driver = ur.firefoxDriverConnection();
 		ur.visit("https://scrum-metrics.herokuapp.com/start/register");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}

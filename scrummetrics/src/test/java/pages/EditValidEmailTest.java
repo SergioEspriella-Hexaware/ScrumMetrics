@@ -66,7 +66,7 @@ public class EditValidEmailTest {
 	@Before
 	public void setUp() throws Exception {
 		ep = new EditProfile(driver);
-		driver = ep.chromeDriverConnection();
+		driver = ep.firefoxDriverConnection();
 		ep.visit("https://scrum-metrics.herokuapp.com/start/login");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
