@@ -66,7 +66,7 @@ public class UserRegistrationPasswordCriteriaTest {
 	@Before
 	public void setUp() throws Exception {
 		ur = new UserRegistration(driver);
-		driver = ur.firefoxDriverConnection();
+		driver = ur.chromeDriverConnection();
 		ur.visit("https://scrum-metrics.herokuapp.com/start/register");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}

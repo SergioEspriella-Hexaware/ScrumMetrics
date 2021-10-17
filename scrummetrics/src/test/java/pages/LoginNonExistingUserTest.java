@@ -62,7 +62,7 @@ public class LoginNonExistingUserTest {
 	@Before
 	public void setUp() throws Exception {
 		login = new Login(driver);
-		driver = login.edgeDriverConnection();
+		driver = login.chromeDriverConnection();
 		login.visit("https://scrum-metrics.herokuapp.com/start/login");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}

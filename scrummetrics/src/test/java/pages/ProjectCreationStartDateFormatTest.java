@@ -70,7 +70,7 @@ public class ProjectCreationStartDateFormatTest {
 	@Before
 	public void setUp() throws Exception {
 		pc = new ProjectCreation(driver);
-		driver = pc.firefoxDriverConnection();
+		driver = pc.chromeDriverConnection();
 		pc.visit("https://scrum-metrics.herokuapp.com/start/login");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
