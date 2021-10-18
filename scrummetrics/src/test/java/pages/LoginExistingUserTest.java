@@ -72,9 +72,10 @@ public class LoginExistingUserTest {
 	public void setUp() throws Exception {
 		if (htmlreporter == null) {
 			reporter = new ExtentReports();
-			htmlreporter = new ExtentHtmlReporter("reportes/login_existing_user.html");
+			htmlreporter = new ExtentHtmlReporter("reportes/login_tests.html");
+			htmlreporter.setAppendExisting(true);
 			reporter.attachReporter(htmlreporter);
-			test = reporter.createTest("MyFirstTest", "Sample description");
+			test = reporter.createTest("Existing User", "Test de login con usuario existente");
 		}
 		test.log(Status.INFO, "iniciando el test con username = " + username + " y password = " + password + "");
 		login = new Login(driver);
@@ -90,10 +91,12 @@ public class LoginExistingUserTest {
 
 	@Test
 	public void test() throws InterruptedException {
-		login.fillLogin(username, password);
+		login.fillLogin(username, password, test);
 		Thread.sleep(1000);
-		test.log(Status.PASS, "Type2(status, details)");
-		test.log(Status.FAIL, "Submit(status, details)");
+		if(login.getURL().equals("https://scrum-metrics.herokuapp.com/app/project"))
+			test.log(Status.PASS, "Se ingresó al sistema con éxito");
+		else
+			test.log(Status.FAIL, "No se pudo ingresar al sistema");
 		assertEquals("https://scrum-metrics.herokuapp.com/app/project", login.getURL());
 	}
 
