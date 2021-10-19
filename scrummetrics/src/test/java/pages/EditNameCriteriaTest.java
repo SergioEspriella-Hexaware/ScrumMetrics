@@ -16,11 +16,17 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 
 @RunWith(Parameterized.class)
 public class EditNameCriteriaTest {
@@ -28,6 +34,9 @@ public class EditNameCriteriaTest {
 	private WebDriver driver;
 	EditProfile ep;
 	private final String name, email, username, password;
+	static ExtentReports reporter;
+	static ExtentHtmlReporter htmlreporter;
+	static ExtentTest test;
 	
 	@Parameterized.Parameters(name = "using a={0}")
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
@@ -65,6 +74,14 @@ public class EditNameCriteriaTest {
 
 	@Before
 	public void setUp() throws Exception {
+		if (htmlreporter == null) {
+			reporter = new ExtentReports();
+			htmlreporter = new ExtentHtmlReporter("reportes/edit_profile_tests.html");
+			htmlreporter.setAppendExisting(true);
+			reporter.attachReporter(htmlreporter);
+			test = reporter.createTest("Name Criteria", "Test de editar nombre de perfil (criterios)");
+		}
+		test.log(Status.INFO, "iniciando el test con username = " + username + " y password = " + password + "");
 		ep = new EditProfile(driver);
 		driver = ep.firefoxDriverConnection();
 		ep.visit("https://scrum-metrics.herokuapp.com/start/login");
@@ -73,13 +90,26 @@ public class EditNameCriteriaTest {
 
 	@After
 	public void tearDown() throws Exception {
+		driver.switchTo().alert().accept();
 		driver.close();
 	}
 
 	@Test
 	public void test() {
-		ep.EditName(name, email, username, password);
+		ep.EditName(name, email, username, password, test);
+		String alert = ep.wrongNameCriteria();
+		if(alert.equals("Alert was not shown"))
+			test.log(Status.FAIL, "Error en la edicion del Email, ninguna alerta mostrada");
+		else if (alert.equals("Name must not have numbers or special characters"))
+			test.log(Status.PASS, "Alerta de Email no valido mostrada");
+		else
+			test.log(Status.FAIL, "Error: nombre no valido ha sido aceptado");
 		assertEquals("Name must not have numbers or special characters", ep.wrongNameCriteria());
+	}
+	
+	@AfterClass
+	public static void afterTests() {
+		reporter.flush();
 	}
 
 }

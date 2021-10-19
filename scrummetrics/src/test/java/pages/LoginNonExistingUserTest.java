@@ -16,11 +16,17 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 
 @RunWith(Parameterized.class)
 public class LoginNonExistingUserTest {
@@ -28,6 +34,9 @@ public class LoginNonExistingUserTest {
 	private WebDriver driver;
 	Login login;
 	private final String username, password;
+	static ExtentReports reporter;
+	static ExtentHtmlReporter htmlreporter;
+	static ExtentTest test;
 
 	@Parameterized.Parameters(name = "using user={0} pass={1}")
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
@@ -61,6 +70,14 @@ public class LoginNonExistingUserTest {
 
 	@Before
 	public void setUp() throws Exception {
+		if (htmlreporter == null) {
+			reporter = new ExtentReports();
+			htmlreporter = new ExtentHtmlReporter("reportes/login_tests.html");
+			htmlreporter.setAppendExisting(true);
+			reporter.attachReporter(htmlreporter);
+			test = reporter.createTest("Non Existing User", "Test de login con usuario no registrado");
+		}
+		test.log(Status.INFO, "iniciando el test con username = " + username + " y password = " + password + "");
 		login = new Login(driver);
 		driver = login.chromeDriverConnection();
 		login.visit("https://scrum-metrics.herokuapp.com/start/login");
@@ -74,14 +91,25 @@ public class LoginNonExistingUserTest {
 
 	@Test
 	public void test() throws InterruptedException {
-		//TODO
-		//login.fillLogin(username, password, test);
+		login.fillLogin(username, password, test);
+		if(!login.wrongUser().equals("Alert was not shown"))
+			test.log(Status.PASS, "Usuario inexistente no pudo ingresar");
+		else
+		{
+			test.log(Status.FAIL, "Error en el inicio de sesión, alerta de usuario inexistente no mostrada");
+		}
+		//test.log(Status.INFO, "Resultado de StackTrace: " + Thread.currentThread().getStackTrace());
 		try {
-			assertTrue(login.wrongUser() != "");
+			assertTrue(!login.wrongUser().equals("Alert was not shown"));
 		} catch (Exception e) {
 			fail();
 		}
 
+	}
+	
+	@AfterClass
+	public static void afterTests() {
+		reporter.flush();
 	}
 
 }
