@@ -90,6 +90,7 @@ public class UserRegistrationValidEmailTest {
 
 	@After
 	public void tearDown() throws Exception {
+		driver.switchTo().alert().accept();
 		driver.close();
 	}
 	
