@@ -3,10 +3,19 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+
 public class ProjectCreation extends Base {
 
 	public ProjectCreation(WebDriver driver) {
 		super(driver);
+	}
+
+	static ExtentTest currentTest;
+
+	public void setExtentTest(ExtentTest test) {
+		currentTest = test;
 	}
 
 	By usernameLocator = By.id("mat-input-0");
@@ -41,38 +50,97 @@ public class ProjectCreation extends Base {
 
 	public void fillLogin(String username, String password) {
 		type(username, usernameLocator);
+		if (getValue(usernameLocator).equals(username))
+			currentTest.log(Status.PASS, "Username introducido correctamente");
+		else
+			currentTest.log(Status.FAIL, "Username no introducido");
 		type(password, passLocator);
+		if (getValue(passLocator).equals(password))
+			currentTest.log(Status.PASS, "Password introducido correctamente");
+		else
+			currentTest.log(Status.FAIL, "Password no introducido");
 		submit(loginLocator);
+		currentTest.log(Status.PASS, "Botón de login presionado");
 	}
 
 	public void nonUserTest(String name, String description, String SDate, String role, String member) {
 		click(newProjectLocator);
+		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+			currentTest.log(Status.PASS, "La ventana de New Project abrió");
+		else
+			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
+
 		type(name, nameLocator);
+		if (getValue(nameLocator).equals(name))
+			currentTest.log(Status.PASS, "Nombre introducido correctamente");
+		else
+			currentTest.log(Status.FAIL, "Nombre no introducido");
+
 		type(description, descriptionLocator);
+		if (getValue(descriptionLocator).equals(description))
+			currentTest.log(Status.PASS, "Descripción introducida correctamente");
+		else
+			currentTest.log(Status.FAIL, "Descripción no introducida");
 
 		roleSelectLocator = By.xpath("//option[@value='" + role + "']");
 		click(roleSelectLocator);
 		type(member, memberUsernameLocator);
+		if (getValue(memberUsernameLocator).equals(member))
+			currentTest.log(Status.PASS, "Nombre del miembro introducido correctamente");
+		else
+			currentTest.log(Status.FAIL, "Nombre del miembro no introducido");
 		click(addMemberLocator);
+		currentTest.log(Status.PASS, "Botón de añadir miembro presionado");
 	}
 
 	public void memberUserTest(String name, String description, String SDate, String role, String member) {
 		click(newProjectLocator);
+		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+			currentTest.log(Status.PASS, "La ventana de New Project abrió");
+		else
+			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
+
 		type(name, nameLocator);
+		if (getValue(nameLocator).equals(name))
+			currentTest.log(Status.PASS, "Nombre introducido correctamente");
+		else
+			currentTest.log(Status.FAIL, "Nombre no introducido");
+
 		type(description, descriptionLocator);
+		if (getValue(descriptionLocator).equals(description))
+			currentTest.log(Status.PASS, "Descripción introducida correctamente");
+		else
+			currentTest.log(Status.FAIL, "Descripción no introducida");
 
 		roleSelectLocator = By.xpath("//option[@value='" + role + "']");
 		click(roleSelectLocator);
 		type(member, memberUsernameLocator);
+		if (getValue(memberUsernameLocator).equals(member))
+			currentTest.log(Status.PASS, "Nombre del miembro introducido correctamente");
+		else
+			currentTest.log(Status.FAIL, "Nombre del miembro no introducido");
 		click(addMemberLocator);
 		scrollElement(memberListLocator);
 		click(memberListLocator);
+		currentTest.log(Status.PASS, "Botón de añadir miembro presionado");
 	}
 
 	public void newProjectDateTest(String name, String description, String sDate) {
 		click(newProjectLocator);
+		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+			currentTest.log(Status.PASS, "La ventana de New Project abrió");
+		else
+			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
 		type(name, nameLocator);
+		if (getValue(nameLocator).equals(name))
+			currentTest.log(Status.PASS, "Nombre introducido correctamente");
+		else
+			currentTest.log(Status.FAIL, "Nombre no introducido");
 		type(description, descriptionLocator);
+		if (getValue(descriptionLocator).equals(description))
+			currentTest.log(Status.PASS, "Descripción introducida correctamente");
+		else
+			currentTest.log(Status.FAIL, "Descripción no introducida");
 
 		if (!sDate.isEmpty()) {
 			scrollElement(startDateButtonLocator);
@@ -80,53 +148,98 @@ public class ProjectCreation extends Base {
 			click(startDateButtonLocator);
 			startDate = By.cssSelector("td[aria-label=\"" + sDate + "\"]");
 			click(startDate);
+			currentTest.log(Status.PASS, "Fecha de inicio seleccionada");
 		}
 		submit(createButtonLocator);
+		currentTest.log(Status.PASS, "Botón de crear proyecto presionado");
 	}
 
 	public void newProjectDateFormatTest(String name, String description, String sDate) {
 		click(newProjectLocator);
+		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+			currentTest.log(Status.PASS, "La ventana de New Project abrió");
+		else
+			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
 		type(name, nameLocator);
+		if (getValue(nameLocator).equals(name))
+			currentTest.log(Status.PASS, "Nombre introducido correctamente");
+		else
+			currentTest.log(Status.FAIL, "Nombre no introducido");
 		type(description, descriptionLocator);
+		if (getValue(descriptionLocator).equals(description))
+			currentTest.log(Status.PASS, "Descripción introducida correctamente");
+		else
+			currentTest.log(Status.FAIL, "Descripción no introducida");
 
 		if (!sDate.isEmpty()) {
 			scrollElement(startDateButtonLocator);
 			click(startDateButtonLocator);
 			startDate = By.cssSelector("td[aria-label=\"" + sDate + "\"]");
 			click(startDate);
+			currentTest.log(Status.PASS, "Fecha de inicio seleccionada");
 		}
-		submit(createButtonLocator);
 	}
 
 	public void newProject(String name, String description, String sDate, String eDate) {
 		click(newProjectLocator);
+		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+			currentTest.log(Status.PASS, "La ventana de New Project abrió");
+		else
+			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
 		type(name, nameLocator);
+		if (getValue(nameLocator).equals(name))
+			currentTest.log(Status.PASS, "Nombre introducido correctamente");
+		else
+			currentTest.log(Status.FAIL, "Nombre no introducido");
 		type(description, descriptionLocator);
+		if (getValue(descriptionLocator).equals(description))
+			currentTest.log(Status.PASS, "Descripción introducida correctamente");
+		else
+			currentTest.log(Status.FAIL, "Descripción no introducida");
 		scrollElement(startDateButtonLocator);
 		click(startDateButtonLocator);
 		startDate = By.cssSelector("td[aria-label=\"" + sDate + "\"]");
 		endDate = By.xpath(
 				"//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr/td[@aria-label='" + eDate + "']");
 		click(startDate);
+		currentTest.log(Status.PASS, "Fecha de inicio seleccionada");
 		click(endDateCheck);
+		currentTest.log(Status.PASS, "Checkbox de fecha de final marcado");
 		click(endDateButton);
 		click(endDate);
+		currentTest.log(Status.PASS, "Fecha de final seleccionada");
 		submit(createButtonLocator);
+		currentTest.log(Status.PASS, "Botón de crear proyecto presionado");
 	}
 
 	public void fillNewProject(String name, String description, String sDate, String eDate) {
 		click(newProjectLocator);
+		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+			currentTest.log(Status.PASS, "La ventana de New Project abrió");
+		else
+			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
 		type(name, nameLocator);
+		if (getValue(nameLocator).equals(name))
+			currentTest.log(Status.PASS, "Nombre introducido correctamente");
+		else
+			currentTest.log(Status.FAIL, "Nombre no introducido");
 		type(description, descriptionLocator);
+		if (getValue(descriptionLocator).equals(description))
+			currentTest.log(Status.PASS, "Descripción introducida correctamente");
+		else
+			currentTest.log(Status.FAIL, "Descripción no introducida");
 		scrollElement(startDateButtonLocator);
 		click(startDateButtonLocator);
 		startDate = By.cssSelector("td[aria-label=\"" + sDate + "\"]");
 		endDate = By.xpath(
 				"//*[@id=\"mat-datepicker-1\"]/div/mat-month-view/table/tbody/tr/td[@aria-label='" + eDate + "']");
 		click(startDate);
+		currentTest.log(Status.PASS, "Fecha de inicio seleccionada");
 		click(endDateCheck);
+		currentTest.log(Status.PASS, "Checkbox de fecha de final marcado");
 		click(endDateButton);
 		click(endDate);
+		currentTest.log(Status.PASS, "Fecha de final seleccionada");
 	}
 
 	public boolean isNameErrorDisplayed() {

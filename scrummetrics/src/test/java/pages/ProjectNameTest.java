@@ -22,12 +22,20 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+
 @RunWith(Parameterized.class)
 public class ProjectNameTest {
 
 	private WebDriver driver;
 	ProjectCreation pc;
 	private final String username, password, name, description, startDate;
+	static ExtentReports reporter;
+	static ExtentHtmlReporter htmlreporter;
+	static ExtentTest test;
 
 	@Parameterized.Parameters(name = "using name={2} desc={3}")
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
@@ -71,7 +79,16 @@ public class ProjectNameTest {
 
 	@Before
 	public void setUp() throws Exception {
+		if (htmlreporter == null) {
+			reporter = new ExtentReports();
+			htmlreporter = new ExtentHtmlReporter("reportes/project_creation_tests.html");
+			htmlreporter.setAppendExisting(true);
+			reporter.attachReporter(htmlreporter);
+			test = reporter.createTest("Name Mandatory", "Test de nombre de proyecto obligatorio");
+		}
+		test.log(Status.INFO, "Iniciando el test con name = " + name);
 		pc = new ProjectCreation(driver);
+		pc.setExtentTest(test);
 		driver = pc.chromeDriverConnection();
 		pc.visit("https://scrum-metrics.herokuapp.com/start/login");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -79,7 +96,7 @@ public class ProjectNameTest {
 
 	@After
 	public void tearDown() throws Exception {
-		driver.close();
+		driver.quit();
 	}
 
 	@Test
@@ -87,11 +104,18 @@ public class ProjectNameTest {
 		pc.fillLogin(username, password);
 		pc.newProjectDateFormatTest(name, description, startDate);
 		if (name == "") {
+			if (pc.isNameErrorDisplayed())
+				test.log(Status.PASS, "Se muestra mensaje que falta el nombre");
+			else
+				test.log(Status.FAIL, "No se muestra mensaje que falta el nombre");
 			assertTrue(pc.isNameErrorDisplayed());
 		} else {
+			if (pc.onProjectCreated().equals("Project created succesfully"))
+				test.log(Status.PASS, "El proyecto se creó correctamente");
+			else
+				test.log(Status.FAIL, "El proyecto no se creó");
 			assertEquals("Project created succesfully", pc.onProjectCreated());
 		}
-		Thread.sleep(10000);
 	}
 
 }
