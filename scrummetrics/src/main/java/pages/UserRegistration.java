@@ -1,7 +1,11 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 
 public class UserRegistration extends Base {
 
@@ -18,12 +22,16 @@ public class UserRegistration extends Base {
 	By submitLocator = By.xpath("//button[@class='mat-raised-button']");
 	By emptyNameLocator = By.id("mat-error-0");
 
-	public void fillUserRegistration(String name, String email, String username, String password) {
+	public void fillUserRegistration(String name, String email, String username, String password, ExtentTest currentTest) {
 		type(name, nameLocator);
 		type(email, mailLocator);
 		type(username, usernameLocator);
 		type(password, passLocator);
 		type(password, confirmLocator);
+		if (getValue(nameLocator).equals(name) && getValue(mailLocator).equals(email) && getValue(usernameLocator).equals(username))
+			currentTest.log(Status.PASS, "Datos introducidos correctamente");
+		else
+			currentTest.log(Status.FAIL, "Error al introducir los datos de registro");
 		click(checkboxLocator);
 		submit(submitLocator);
 	}
@@ -32,33 +40,57 @@ public class UserRegistration extends Base {
 		if (isDisplayed(emptyNameLocator)) {
 			return getText(emptyNameLocator);
 		} else {
-			waitAlert();
-			return getMessage();
+			try {
+				waitAlert();
+				return getMessage();
+			} catch (TimeoutException e) {
+				return ("Alert was not shown");
+			}
 		}
 	}
 	
 	public String wrongNameCriteria() {
-		waitAlert();
-		return getMessage();
+		try {
+			waitAlert();
+			return getMessage();
+		} catch (TimeoutException e) {
+			return ("Alert was not shown");
+		}
 	}
 
 	public String wrongPassLenght() {
-		waitAlert();
-		return getMessage();
+		try {
+			waitAlert();
+			return getMessage();
+		} catch (TimeoutException e) {
+			return ("Alert was not shown");
+		}
 	}
 
 	public String wrongPassCriteria() {
-		waitAlert();
-		return getMessage();
+		try {
+			waitAlert();
+			return getMessage();
+		} catch (TimeoutException e) {
+			return ("Alert was not shown");
+		}
 	}
 
 	public String userNotRegistered() {
-		waitAlert();
-		return getMessage();
+		try {
+			waitAlert();
+			return getMessage();
+		} catch (TimeoutException e) {
+			return ("Alert was not shown");
+		}
 	}
 
 	public String userRegistered() {
-		waitAlert();
-		return getMessage();
+		try {
+			waitAlert();
+			return getMessage();
+		} catch (TimeoutException e) {
+			return ("Alert was not shown");
+		}
 	}
 }

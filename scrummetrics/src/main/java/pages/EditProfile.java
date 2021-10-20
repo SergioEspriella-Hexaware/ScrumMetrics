@@ -1,14 +1,18 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 
 public class EditProfile extends Base {
 
 	public EditProfile(WebDriver driver) {
 		super(driver);
 	}
-	
+
 	By usernameLocator = By.xpath("//input[@name='inUser']");
 	By passwordLocator = By.xpath("//input[@name='inPass']");
 	By loginLocator = By.xpath("//button[@class='mat-raised-button']");
@@ -19,49 +23,82 @@ public class EditProfile extends Base {
 	By editEmailLocator = By.xpath("//input[@name='inMail']");
 	By saveLocator = By.xpath("//button[@type='submit']");
 	By emptyNameLocator = By.xpath("//mat-error[@role='alert']");
-	
-	public void EditName (String name, String email, String username, String password) {
+
+	public void EditName(String name, String email, String username, String password, ExtentTest currentTest) {
 		type(username, usernameLocator);
 		type(password, passwordLocator);
 		submit(loginLocator);
+		if (isDisplayed(profilePhotoLocator))
+			currentTest.log(Status.PASS, "Se ingresó al sistema con éxito");
+		else
+			currentTest.log(Status.FAIL, "No se pudo ingresar al sistema");
 		click(profilePhotoLocator);
+		if (isDisplayed(unlockNameLocator) || isDisplayed(unlockEmailLocator))
+			currentTest.log(Status.PASS, "Se logró acceder a la ventana para editar el perfil");
+		else
+			currentTest.log(Status.FAIL, "No se pudo acceder a la ventana para editar el perfil");
 		click(unlockNameLocator);
 		type(name, editNameLocator);
 		submit(saveLocator);
 	}
-	
-	public void EditEmail (String name, String email, String username, String password) {
+
+	public void EditEmail(String name, String email, String username, String password, ExtentTest currentTest) throws InterruptedException {
 		type(username, usernameLocator);
 		type(password, passwordLocator);
 		submit(loginLocator);
+		if (isDisplayed(profilePhotoLocator))
+			currentTest.log(Status.PASS, "Se ingresó al sistema con éxito");
+		else
+			currentTest.log(Status.FAIL, "No se pudo ingresar al sistema");
 		click(profilePhotoLocator);
+		if (isDisplayed(unlockEmailLocator) || isDisplayed(unlockNameLocator))
+			currentTest.log(Status.PASS, "Se logró acceder a la ventana para editar el perfil");
+		else
+			currentTest.log(Status.FAIL, "No se pudo acceder a la ventana para editar el perfil");
 		click(unlockEmailLocator);
 		type(email, editEmailLocator);
+		Thread.sleep(300);
 		submit(saveLocator);
 	}
-	
+
 	public String wrongNameLength() {
 		if (isDisplayed(emptyNameLocator)) {
 			return getText(emptyNameLocator);
 		} else {
-			waitAlert();
-			return getMessage();
+			try {
+				waitAlert();
+				return getMessage();
+			} catch (TimeoutException e) {
+				return ("Alert was not shown");
+			}
 		}
 	}
-	
+
 	public String wrongNameCriteria() {
-		waitAlert();
-		return getMessage();
+		try {
+			waitAlert();
+			return getMessage();
+		} catch (TimeoutException e) {
+			return ("Alert was not shown");
+		}
 	}
-	
+
 	public String validEmailCriteria() {
-		waitAlert();
-		return getMessage();
+		try {
+			waitAlert();
+			return getMessage();
+		} catch (TimeoutException e) {
+			return ("Alert was not shown");
+		}
 	}
-	
+
 	public String invalidEmailCriteria() {
-		waitAlert();
-		return getMessage();
+		try {
+			waitAlert();
+			return getMessage();
+		} catch (TimeoutException e) {
+			return ("Alert was not shown");
+		}
 	}
 
 }

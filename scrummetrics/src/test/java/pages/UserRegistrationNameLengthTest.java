@@ -16,11 +16,17 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 
 @RunWith(Parameterized.class)
 public class UserRegistrationNameLengthTest {
@@ -28,6 +34,9 @@ public class UserRegistrationNameLengthTest {
 	private WebDriver driver;
 	UserRegistration ur;
 	private final String name, email, username, password;
+	static ExtentReports reporter;
+	static ExtentHtmlReporter htmlreporter;
+	static ExtentTest test;
 
 	@Parameterized.Parameters(name = "using a={0}")
 	public static Collection<Object[]> data() throws EncryptedDocumentException, IOException {
@@ -65,6 +74,14 @@ public class UserRegistrationNameLengthTest {
 
 	@Before
 	public void setUp() throws Exception {
+		if (htmlreporter == null) {
+			reporter = new ExtentReports();
+			htmlreporter = new ExtentHtmlReporter("reportes/user_registration_tests.html");
+			htmlreporter.setAppendExisting(true);
+			reporter.attachReporter(htmlreporter);
+			test = reporter.createTest("Name length", "Test para verificar longitud del nombre");
+		}
+		test.log(Status.INFO, "username = " + username + ", password = " + password + ", nombre = " + name + ", email = " + email);
 		ur = new UserRegistration(driver);
 		driver = ur.firefoxDriverConnection();
 		ur.visit("https://scrum-metrics.herokuapp.com/start/register");
@@ -75,15 +92,32 @@ public class UserRegistrationNameLengthTest {
 	public void tearDown() throws Exception {
 		driver.close();
 	}
+	
+	@AfterClass
+	public static void afterTests() {
+		reporter.flush();
+	}
 
 	@Test
 	public void test() {
-		ur.fillUserRegistration(name, email, username, password);
-		if (name.isEmpty()) {
-			assertEquals("You need to enter a name.", ur.wrongNameLength());
+		ur.fillUserRegistration(name, email, username, password, test);
+		String alert = ur.wrongNameLength();
+		if (name.isEmpty() && alert.equals("You need to enter a name.")) {
+			test.log(Status.PASS, "Alerta de nombre vacio mostrada");
+			assertTrue(true);
 		}
-		else
-			assertEquals("name must be less than 256 characters", ur.wrongNameLength());
+		else if (alert.equals("name must be less than 256 characters")) {
+			test.log(Status.PASS, "Alerta de nombre demasiado largo mostrada");
+			assertTrue(true);
+		}
+		else if(alert.equals("Alert was not shown")) {
+			test.log(Status.FAIL, "Error en la edicion del nombre, ninguna alerta mostrada");
+			assertTrue(false);
+		}
+		else {
+			test.log(Status.FAIL, "Error: Nombre no valido ha sido aceptado");
+			assertTrue(false);
+		}
 	}
 
 }
