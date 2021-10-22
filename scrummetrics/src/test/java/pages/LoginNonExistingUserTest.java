@@ -92,17 +92,12 @@ public class LoginNonExistingUserTest {
 	@Test
 	public void test() throws InterruptedException {
 		login.fillLogin(username, password, test);
-		if(!login.wrongUser().equals("Alert was not shown"))
+		if(!login.getURL().equals("https://scrum-metrics.herokuapp.com/app/project")) {
 			test.log(Status.PASS, "Usuario inexistente no pudo ingresar");
-		else
-		{
-			test.log(Status.FAIL, "Error en el inicio de sesión, alerta de usuario inexistente no mostrada");
-		}
-		//test.log(Status.INFO, "Resultado de StackTrace: " + Thread.currentThread().getStackTrace());
-		try {
-			assertTrue(!login.wrongUser().equals("Alert was not shown"));
-		} catch (Exception e) {
-			fail();
+			assertTrue(true);
+		} else {
+			test.log(Status.FAIL, "Error en el inicio de sesión, usuario no registrado pudo ingresar");
+			assertTrue(false);
 		}
 
 	}

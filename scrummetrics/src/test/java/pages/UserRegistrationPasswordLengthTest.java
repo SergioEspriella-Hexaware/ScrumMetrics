@@ -79,7 +79,7 @@ public class UserRegistrationPasswordLengthTest {
 			htmlreporter = new ExtentHtmlReporter("reportes/user_registration_tests.html");
 			htmlreporter.setAppendExisting(true);
 			reporter.attachReporter(htmlreporter);
-			test = reporter.createTest("Name length", "Test para verificar longitud del nombre");
+			test = reporter.createTest("Password length", "Test para verificar longitud del password");
 		}
 		test.log(Status.INFO, "username = " + username + ", password = " + password + ", nombre = " + name + ", email = " + email);
 		ur = new UserRegistration(driver);

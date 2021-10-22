@@ -44,7 +44,7 @@ public class EditInvalidEmailTest {
 
 		InputStream inp = new FileInputStream("excel/ValidEmailUsrReg.xlsx");
 		Workbook wb = WorkbookFactory.create(inp);
-		Sheet sheet = wb.getSheetAt(8);
+		Sheet sheet = wb.getSheetAt(9);
 		DataFormatter formatter = new DataFormatter();
 
 		int row = 1;
@@ -81,7 +81,7 @@ public class EditInvalidEmailTest {
 			reporter.attachReporter(htmlreporter);
 			test = reporter.createTest("Invalid Email", "Test de editar perfil con email no valido");
 		}
-		test.log(Status.INFO, "iniciando el test con username = " + username + " y password = " + password + "");
+		test.log(Status.INFO, "Username = " + username + ", Password = " + password + ", Nuevo email = " + email);
 		ep = new EditProfile(driver);
 		driver = ep.chromeDriverConnection();
 		ep.visit("https://scrum-metrics.herokuapp.com/start/login");

@@ -95,6 +95,8 @@ public class LoginExistingUserTest {
 		Thread.sleep(1000);
 		if(login.getURL().equals("https://scrum-metrics.herokuapp.com/app/project"))
 			test.log(Status.PASS, "Se ingresó al sistema con éxito");
+		else if (username.equals("") || password.equals(""))
+			test.log(Status.INFO, "usuario y contraseña vacios");
 		else
 			test.log(Status.FAIL, "No se pudo ingresar al sistema");
 		assertEquals("https://scrum-metrics.herokuapp.com/app/project", login.getURL());

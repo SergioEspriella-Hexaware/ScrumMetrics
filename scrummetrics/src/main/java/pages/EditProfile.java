@@ -56,6 +56,7 @@ public class EditProfile extends Base {
 		else
 			currentTest.log(Status.FAIL, "No se pudo acceder a la ventana para editar el perfil");
 		click(unlockEmailLocator);
+		Thread.sleep(300);
 		type(email, editEmailLocator);
 		Thread.sleep(300);
 		submit(saveLocator);
