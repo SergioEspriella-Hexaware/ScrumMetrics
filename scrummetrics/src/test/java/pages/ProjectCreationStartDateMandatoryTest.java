@@ -55,7 +55,7 @@ public class ProjectCreationStartDateMandatoryTest {
 				String projectName = formatter.formatCellValue(sheet.getRow(row).getCell(2));
 				String description = formatter.formatCellValue(sheet.getRow(row).getCell(3));
 				String startDate = formatter.formatCellValue(sheet.getRow(row).getCell(4));
-				
+
 				if (username == "" && password == "")
 					break;
 
@@ -89,7 +89,7 @@ public class ProjectCreationStartDateMandatoryTest {
 		test.log(Status.INFO, "Iniciando el test con start_date = " + startDate);
 		pc = new ProjectCreation(driver);
 		pc.setExtentTest(test);
-		driver = pc.firefoxDriverConnection();
+		driver = pc.chromeDriverConnection();
 		pc.visit("https://scrum-metrics.herokuapp.com/start/login");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}

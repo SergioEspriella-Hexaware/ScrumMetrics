@@ -86,14 +86,14 @@ public class LoginExistingUserTest {
 
 	@After
 	public void tearDown() throws Exception {
-		driver.close();
+		driver.quit();
 	}
 
 	@Test
 	public void test() throws InterruptedException {
 		login.fillLogin(username, password, test);
 		Thread.sleep(1000);
-		if(login.getURL().equals("https://scrum-metrics.herokuapp.com/app/project"))
+		if (login.getURL().equals("https://scrum-metrics.herokuapp.com/app/project"))
 			test.log(Status.PASS, "Se ingresó al sistema con éxito");
 		else if (username.equals("") || password.equals(""))
 			test.log(Status.INFO, "usuario y contraseña vacios");

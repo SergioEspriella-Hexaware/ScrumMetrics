@@ -18,16 +18,18 @@ public class ProjectCreation extends Base {
 		currentTest = test;
 	}
 
+	By newProjectWindowLocator = By.xpath("//h1[contains(text(),'New Project')]");
 	By usernameLocator = By.id("mat-input-0");
 	By passLocator = By.id("mat-input-1");
 	By loginLocator = By.xpath("//button[@class='mat-raised-button']");
 
 	By newProjectLocator = By.cssSelector("a[ng-reflect-message=\"Create a new project!\"]");
-	By nameLocator = By.id("mat-input-2");
+	By nameLocator = By.xpath(
+			"//body[1]/div[2]/div[2]/div[1]/mat-dialog-container[1]/app-newproject[1]/div[1]/form[1]/div[1]/div[1]/div[2]/mat-form-field[1]/div[1]/div[1]/div[1]/input[1]");
 	By descriptionLocator = By.id("mat-input-3");
 	By roleSelectLocator;
 	By memberUsernameLocator = By.xpath(
-			"//input[@class='mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored ng-untouched ng-pristine ng-valid']");
+			"/html[1]/body[1]/div[2]/div[2]/div[1]/mat-dialog-container[1]/app-newproject[1]/div[1]/form[1]/div[1]/div[1]/div[2]/mat-form-field[4]/div[1]/div[1]/div[1]/div[1]/input[1]");
 	By addMemberLocator = By.xpath("//span[contains(text(),'Add')]");
 
 	// TODO improve start date xpath
@@ -45,6 +47,7 @@ public class ProjectCreation extends Base {
 	By missingFieldLocator = By.xpath("//mat-error[@class='mat-error ng-star-inserted']");
 	By startDateInputLocator = By.xpath("//input[@name='inDate1']");
 	By endDateInputLocator = By.xpath("//input[@name='inDate2']");
+
 	By memberNameListLocator = By.xpath("//mat-panel-title[@class='mat-expansion-panel-header-title']");
 	By memberListLocator = By.xpath("//mat-expansion-panel-header");
 
@@ -65,7 +68,7 @@ public class ProjectCreation extends Base {
 
 	public void nonUserTest(String name, String description, String SDate, String role, String member) {
 		click(newProjectLocator);
-		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+		if (isDisplayed(newProjectWindowLocator))
 			currentTest.log(Status.PASS, "La ventana de New Project abrió");
 		else
 			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
@@ -95,7 +98,7 @@ public class ProjectCreation extends Base {
 
 	public void memberUserTest(String name, String description, String SDate, String role, String member) {
 		click(newProjectLocator);
-		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+		if (isDisplayed(newProjectWindowLocator))
 			currentTest.log(Status.PASS, "La ventana de New Project abrió");
 		else
 			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
@@ -120,14 +123,14 @@ public class ProjectCreation extends Base {
 		else
 			currentTest.log(Status.FAIL, "Nombre del miembro no introducido");
 		click(addMemberLocator);
+		currentTest.log(Status.PASS, "Botón de añadir miembro presionado");
 		scrollElement(memberListLocator);
 		click(memberListLocator);
-		currentTest.log(Status.PASS, "Botón de añadir miembro presionado");
 	}
 
 	public void newProjectDateTest(String name, String description, String sDate) {
 		click(newProjectLocator);
-		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+		if (isDisplayed(newProjectWindowLocator))
 			currentTest.log(Status.PASS, "La ventana de New Project abrió");
 		else
 			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
@@ -156,7 +159,7 @@ public class ProjectCreation extends Base {
 
 	public void newProjectDateFormatTest(String name, String description, String sDate) {
 		click(newProjectLocator);
-		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+		if (isDisplayed(newProjectWindowLocator))
 			currentTest.log(Status.PASS, "La ventana de New Project abrió");
 		else
 			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
@@ -182,7 +185,7 @@ public class ProjectCreation extends Base {
 
 	public void newProject(String name, String description, String sDate, String eDate) {
 		click(newProjectLocator);
-		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+		if (isDisplayed(newProjectWindowLocator))
 			currentTest.log(Status.PASS, "La ventana de New Project abrió");
 		else
 			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
@@ -214,7 +217,7 @@ public class ProjectCreation extends Base {
 
 	public void fillNewProject(String name, String description, String sDate, String eDate) {
 		click(newProjectLocator);
-		if (isDisplayed(By.id("id=\"cdk-overlay-1\"")))
+		if (isDisplayed(newProjectWindowLocator))
 			currentTest.log(Status.PASS, "La ventana de New Project abrió");
 		else
 			currentTest.log(Status.FAIL, "La ventana de New Project no se abrió");
@@ -256,41 +259,48 @@ public class ProjectCreation extends Base {
 	}
 
 	public String memberValidation() {
-		if (isDisplayed(memberNameListLocator)) {
+		try {
+			Thread.sleep(1000);
 			return getText(memberNameListLocator);
-		} else {
+		} catch (Exception e) {
 			return "";
 		}
 	}
 
 	public String noStartDateValidation() {
 		scrollElement(missingFieldLocator);
-		if (isDisplayed(missingFieldLocator)) {
+		try {
 			return getText(missingFieldLocator);
-		} else {
-			waitAlert();
-			return getMessage();
+		} catch (Exception e) {
+			return "Line 273";
 		}
 	}
 
 	public String noDescriptionValidation() {
 		scrollElement(missingFieldLocator);
-		if (isDisplayed(missingFieldLocator)) {
+		try {
 			return getText(missingFieldLocator);
-		} else {
-			waitAlert();
-			return getMessage();
+		} catch (Exception e) {
+			return "Line 282";
 		}
 	}
 
 	public String descriptionValidation() {
-		waitAlert();
-		return getMessage();
+		try {
+			waitAlert();
+			return getMessage();
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 	public String startDateValidation() {
-		waitAlert();
-		return getMessage();
+		try {
+			waitAlert();
+			return getMessage();
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 	public String startDateFormatValidation() {

@@ -89,7 +89,7 @@ public class ProjectEndDateFormatTest {
 		test.log(Status.INFO, "Iniciando el test con end_date = " + endDate);
 		pc = new ProjectCreation(driver);
 		pc.setExtentTest(test);
-		driver = pc.edgeDriverConnection();
+		driver = pc.chromeDriverConnection();
 		pc.visit("https://scrum-metrics.herokuapp.com/start/login");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
